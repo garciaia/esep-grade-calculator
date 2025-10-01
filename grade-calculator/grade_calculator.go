@@ -62,18 +62,21 @@ func (gc *GradeCalculator) AddGrade(name string, grade int, gradeType GradeType)
 			Grade: grade,
 			Type:  Assignment,
 		})
+
 	case Exam:
 		gc.exams = append(gc.exams, Grade{
 			Name:  name,
 			Grade: grade,
 			Type:  Exam,
-		})
+		})	
+
 	case Essay:
 		gc.essays = append(gc.essays, Grade{
 			Name:  name,
 			Grade: grade,
 			Type:  Essay,
 		})
+
 	}
 }
 
@@ -90,9 +93,9 @@ func (gc *GradeCalculator) calculateNumericalGrade() int {
 func computeAverage(grades []Grade) int {
 	sum := 0
 
-	for grade, _ := range grades {
-		sum += grade
+	for _, grade := range grades {
+		sum += grade.Grade
 	}
-
+	
 	return sum / len(grades)
 }
