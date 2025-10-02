@@ -89,7 +89,7 @@ func TestGetGradeTypeAssignment(t *testing.T) {
 
 	gradeCalculator.AddGrade("open source assignment", 58, Assignment)
 
-	actual_value := gradeCalculator.assignments[0].Type.String()
+	actual_value := gradeCalculator.studentGrades[0].Type.String()
 
 	if expected_value != actual_value {
 		t.Errorf("Expected String() to return '%s'; got '%s' instead", expected_value, actual_value)
