@@ -2,6 +2,7 @@ package esepunittests
 
 type GradeCalculator struct {
 	studentGrades []Grade
+	PassOrFail    bool
 }
 
 type GradeType int
@@ -45,9 +46,11 @@ func (gc *GradeCalculator) GetFinalGrade() string {
 		return "C"
 	} else if numericalGrade >= 60 {
 		return "D"
+	} else if numericalGrade <= 59 && numericalGrade >= 0 {
+		return "F"
 	}
 
-	return "F"
+	return "N/A"
 }
 
 func (gc *GradeCalculator) AddGrade(name string, grade int, gradeType GradeType) {
@@ -80,6 +83,10 @@ func (gc *GradeCalculator) calculateNumericalGrade() int {
 	var assignments []Grade
 	var exams []Grade
 	var essays []Grade
+	assignment_weight := 0.5
+	exam_weight := 0.35
+	essay_weight := 0.15
+
 	for _, grade := range gc.studentGrades {
 		currType := grade.Type
 		switch currType {
@@ -95,12 +102,36 @@ func (gc *GradeCalculator) calculateNumericalGrade() int {
 	exam_average := computeAverage(exams)
 	essay_average := computeAverage(essays)
 
-	weighted_grade := float64(assignment_average)*.5 + float64(exam_average)*.35 + float64(essay_average)*.15
+	sum_weights := 0.0
+
+	if len(assignments) != 0 {
+		sum_weights += assignment_weight
+	}
+
+	if len(exams) != 0 {
+		sum_weights += exam_weight
+	}
+
+	if len(essays) != 0 {
+		sum_weights += essay_weight
+	}
+
+	weighted_grade := float64(assignment_average)*assignment_weight + float64(exam_average)*exam_weight + float64(essay_average)*essay_weight
+
+	if sum_weights == 0 {
+		return -1
+	}
+
+	weighted_grade = weighted_grade / sum_weights
 
 	return int(weighted_grade)
 }
 
 func computeAverage(grades []Grade) int {
+	if len(grades) == 0 {
+		return 0
+	}
+
 	sum := 0
 
 	for _, grade := range grades {
