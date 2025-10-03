@@ -37,20 +37,30 @@ func NewGradeCalculator() *GradeCalculator {
 
 func (gc *GradeCalculator) GetFinalGrade() string {
 	numericalGrade := gc.calculateNumericalGrade()
-
+	output := ""
 	if numericalGrade >= 90 {
-		return "A"
+		output = "A"
 	} else if numericalGrade >= 80 {
-		return "B"
+		output = "B"
 	} else if numericalGrade >= 70 {
-		return "C"
+		output = "C"
 	} else if numericalGrade >= 60 {
-		return "D"
+		output = "D"
 	} else if numericalGrade <= 59 && numericalGrade >= 0 {
-		return "F"
+		output = "F"
+	} else {
+		output = "N/A"
 	}
 
-	return "N/A"
+	if gc.PassOrFail {
+		if output == "F" {
+			return "Fail"
+		} else if output != "N/A" {
+			return "Pass"
+		}
+	}
+
+	return output
 }
 
 func (gc *GradeCalculator) AddGrade(name string, grade int, gradeType GradeType) {
